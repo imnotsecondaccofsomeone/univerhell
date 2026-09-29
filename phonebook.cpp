@@ -88,6 +88,123 @@ void displayContacts() {
   cin.get();
 }
 
+void searchContacts() {
+  system("clear");
+  int userSearchChoice;
+
+  cout << "search via what? \n";
+  cout << "1. first name... \n";
+  cout << "2. last name... \n";
+  cout << "3. phone number... \n";
+  cout << "4. quit... \n";
+  cin >> userSearchChoice;
+
+  while (userSearchChoice < 1 || userSearchChoice > 4) {
+    system("clear");
+    cout << "you need to enter number 1-4\n";
+    cout << "try again 1 to 4\n";
+    cin >> userSearchChoice;
+  }
+
+  if (userSearchChoice == 4) {
+    return;
+  }
+
+  ifstream readContacts("contacts.txt");
+  string firstNameInput;
+  string lastNameInput;
+  int phoneInput;
+
+  switch (userSearchChoice) {
+  case 1: {
+    system("clear");
+    cout << "enter first name...";
+    cin >> firstNameInput;
+
+    while (!readContacts.eof()) {
+      getline(readContacts, tell.firstName);
+      getline(readContacts, tell.lastName);
+      readContacts >> tell.phone;
+
+      if (readContacts.eof()) {
+        break;
+      }
+
+      if (tell.firstName == firstNameInput) {
+        cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+             << setw(20) << tell.phone << endl;
+      }
+
+      readContacts.get();
+    }
+
+    readContacts.close();
+    cout << "\npress enter to continue...";
+    cin.get();
+    cin.get();
+    break;
+  }
+
+  case 2: {
+    system("clear");
+    cout << "enter last name...";
+    cin >> lastNameInput;
+
+    while (!readContacts.eof()) {
+      getline(readContacts, tell.firstName);
+      getline(readContacts, tell.lastName);
+      readContacts >> tell.phone;
+
+      if (readContacts.eof()) {
+        break;
+      }
+
+      if (tell.lastName == lastNameInput) {
+        cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+             << setw(20) << tell.phone << endl;
+      }
+
+      readContacts.get();
+    }
+
+    readContacts.close();
+    cout << "\npress enter to continue...";
+    cin.get();
+    cin.get();
+    break;
+  }
+
+  case 3: {
+    system("clear");
+    cout << "enter phone number...";
+    cin >> phoneInput;
+
+    while (!readContacts.eof()) {
+      getline(readContacts, tell.firstName);
+      getline(readContacts, tell.lastName);
+      readContacts >> tell.phone;
+
+      if (readContacts.eof()) {
+        break;
+      }
+
+      if (tell.phone == phoneInput) {
+        cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+             << setw(20) << tell.phone << endl;
+      }
+
+      readContacts.get();
+    }
+
+    readContacts.close();
+    cout << "\npress enter to continue...";
+    cin.get();
+    cin.get();
+    break;
+  }
+  }
+}
+
 int main() {
   int z;
   while (true) {
@@ -98,6 +215,7 @@ int main() {
       addContact();
       break;
     case 2:
+      searchContacts();
       break;
     case 3:
       displayContacts();
