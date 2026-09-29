@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
@@ -60,8 +61,30 @@ void addContact() {
 }
 
 void displayContacts() {
+  ifstream readContacts("contacts.txt");
   system("clear");
-  cout << "dayum";
+  cout << left << setw(20) << "first name" << setw(20) << "last name"
+       << setw(20) << "phone" << endl;
+  cout << "==========================================================\n";
+
+  while (!readContacts.eof()) {
+    getline(readContacts, tell.firstName);
+    getline(readContacts, tell.lastName);
+    readContacts >> tell.phone;
+
+    if (readContacts.eof()) {
+      break;
+    }
+
+    cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+         << setw(20) << tell.phone << endl;
+
+    readContacts.get();
+  }
+
+  cout << "press enter to continue...";
+
+  cin.get();
   cin.get();
 }
 
