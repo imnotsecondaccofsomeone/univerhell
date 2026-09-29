@@ -205,6 +205,71 @@ void searchContacts() {
   }
 }
 
+void deleteContact() {
+  system("clear");
+  ifstream readContacts("contacts.txt");
+
+  cout << left << setw(20) << "first name" << setw(20) << "last name"
+       << setw(20) << "phone" << endl;
+  cout << "==========================================================\n";
+
+  while (!readContacts.eof()) {
+    getline(readContacts, tell.firstName);
+    getline(readContacts, tell.lastName);
+    readContacts >> tell.phone;
+
+    if (readContacts.eof()) {
+      break;
+    }
+
+    cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+         << setw(20) << tell.phone << endl;
+
+    readContacts.get();
+  }
+
+  string firstNameInputForDelete;
+  cout << "===========================\n";
+  cout << "enter first name you want to delete... \n";
+  cout << "===========================\n";
+  cin >> firstNameInputForDelete;
+
+  ofstream createTempDataBase("temp.txt");
+
+  readContacts.close();
+  readContacts.open("contacts.txt");
+
+  while (!readContacts.eof()) {
+    getline(readContacts, tell.firstName);
+    getline(readContacts, tell.lastName);
+    readContacts >> tell.phone;
+
+    if (readContacts.eof()) {
+      break;
+    }
+
+    if (tell.firstName != firstNameInputForDelete) {
+      createTempDataBase << tell.firstName << endl;
+      createTempDataBase << tell.lastName << endl;
+      createTempDataBase << tell.phone << endl;
+    }
+
+    readContacts.get();
+  }
+
+  readContacts.close();
+  createTempDataBase.close();
+
+  remove("contacts.txt");
+
+  rename("temp.txt", "contacts.txt");
+
+  cout << "\nContact deleted!\n";
+  cout << "press enter to continue...";
+  cin.get();
+  cin.get();
+}
+
 int main() {
   int z;
   while (true) {
@@ -221,6 +286,7 @@ int main() {
       displayContacts();
       break;
     case 4:
+      deleteContact();
       break;
     case 5:
       break;
