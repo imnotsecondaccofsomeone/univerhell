@@ -1,9 +1,6 @@
-ali
-alii
+kir
+kos
 9
-salam
-salamiiii
-123
 javad
 ali
 123
@@ -13,3 +10,6 @@ ali
 solton
 ali
 2147483647
+kir
+kos
+123

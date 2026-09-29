@@ -270,6 +270,105 @@ void deleteContact() {
   cin.get();
 }
 
+void editContact() {
+  system("clear");
+  ifstream readContacts("contacts.txt");
+
+  cout << left << setw(20) << "first name" << setw(20) << "last name"
+       << setw(20) << "phone" << endl;
+  cout << "==========================================================\n";
+
+  while (!readContacts.eof()) {
+    getline(readContacts, tell.firstName);
+    getline(readContacts, tell.lastName);
+    readContacts >> tell.phone;
+
+    if (readContacts.eof()) {
+      break;
+    }
+
+    cout << left << setw(20) << tell.firstName << setw(20) << tell.lastName
+         << setw(20) << tell.phone << endl;
+
+    readContacts.get();
+  }
+
+  string firstNameInputForEdit;
+  cout << "===========================\n";
+  cout << "enter first name you want to edit... \n";
+  cout << "===========================\n";
+  cin >> firstNameInputForEdit;
+
+  int editChoice;
+  cout << "what do you want to change?\n";
+  cout << "1. first name\n";
+  cout << "2. last name\n";
+  cout << "3. phone number\n";
+  cin >> editChoice;
+
+  string newFirstName, newLastName;
+  int newPhone;
+
+  if (editChoice == 1) {
+    cout << "enter new first name: ";
+    cin >> newFirstName;
+  } else if (editChoice == 2) {
+    cout << "enter new last name: ";
+    cin >> newLastName;
+  } else if (editChoice == 3) {
+    cout << "enter new phone number: ";
+    cin >> newPhone;
+  }
+
+  ofstream createTempDataBase("temp.txt");
+
+  readContacts.close();
+  readContacts.open("contacts.txt");
+
+  while (!readContacts.eof()) {
+    getline(readContacts, tell.firstName);
+    getline(readContacts, tell.lastName);
+    readContacts >> tell.phone;
+
+    if (readContacts.eof()) {
+      break;
+    }
+
+    if (tell.firstName != firstNameInputForEdit) {
+      createTempDataBase << tell.firstName << endl;
+      createTempDataBase << tell.lastName << endl;
+      createTempDataBase << tell.phone << endl;
+    } else {
+      if (editChoice == 1) {
+        createTempDataBase << newFirstName << endl;
+        createTempDataBase << tell.lastName << endl;
+        createTempDataBase << tell.phone << endl;
+      } else if (editChoice == 2) {
+        createTempDataBase << tell.firstName << endl;
+        createTempDataBase << newLastName << endl;
+        createTempDataBase << tell.phone << endl;
+      } else if (editChoice == 3) {
+        createTempDataBase << tell.firstName << endl;
+        createTempDataBase << tell.lastName << endl;
+        createTempDataBase << newPhone << endl;
+      }
+    }
+
+    readContacts.get();
+  }
+
+  readContacts.close();
+  createTempDataBase.close();
+
+  remove("contacts.txt");
+  rename("temp.txt", "contacts.txt");
+
+  cout << "\nContact edited!\n";
+  cout << "press enter to continue...";
+  cin.get();
+  cin.get();
+}
+
 int main() {
   int z;
   while (true) {
@@ -289,6 +388,7 @@ int main() {
       deleteContact();
       break;
     case 5:
+      editContact();
       break;
     case 6:
       return 0;
