@@ -1,45 +1,55 @@
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
-struct cardInfoStruc {
-  string f_name;
-  string l_name;
-  int c_amount;
-} card;
+struct menuItem {
+  string name;
+  string category;
+  int price;
+};
+
+vector<menuItem> menuVector;
+
+void loadMenu() {
+  // ----- HOT DRINKS -----
+  menuVector.push_back({"Espresso", "HOT", 70000});
+  menuVector.push_back({"Cappuccino", "HOT", 110000});
+  menuVector.push_back({"Latte", "HOT", 130000});
+  menuVector.push_back({"Chai Tea", "HOT", 60000});
+
+  // ----- COLD DRINKS -----
+  menuVector.push_back({"Iced Coffee", "COLD", 130000});
+  menuVector.push_back({"Cold Brew", "COLD", 140000});
+  menuVector.push_back({"Orange Juice", "COLD", 90000});
+
+  // ----- FOOD -----
+  menuVector.push_back({"Croissant", "FOOD", 85000});
+  menuVector.push_back({"Donut", "FOOD", 70000});
+  menuVector.push_back({"Sandwich", "FOOD", 160000});
+  menuVector.push_back({"Cake Slice", "FOOD", 95000});
+
+  // ----- EXTRAS -----
+  menuVector.push_back({"Extra Shot", "EXTRA", 40000});
+  menuVector.push_back({"Oat Milk", "EXTRA", 25000});
+  menuVector.push_back({"Vanilla Syrup", "EXTRA", 15000});
+}
 
 void displayCafeMenu() {
   system("clear");
+
   cout << "===============================================\n";
   cout << "\t LOS POLLOS HERMANOS CAFE MENU \t\n";
   cout << "\t     all prices in Toman\n";
-  cout << "===============================================\n";
+  cout << "===============================================\n\n";
 
-  cout << "\n-- HOT DRINKS --\n";
-  cout << "1.  Espresso ............. 70,000\n";
-  cout << "2.  Cappuccino ........... 110,000\n";
-  cout << "3.  Latte ................ 120,000\n";
-  cout << "4.  Chai Tea ............. 60,000\n";
+  for (int i = 0; i < menuVector.size(); i++) {
+    cout << i + 1 << ".   " << menuVector[i].name
+         << " ........................... " << menuVector[i].price << endl;
+  }
 
-  cout << "\n-- COLD DRINKS --\n";
-  cout << "5.  Iced Coffee .......... 130,000\n";
-  cout << "6.  Cold Brew ............ 140,000\n";
-  cout << "7.  Orange Juice.......... 90,000\n";
-
-  cout << "\n-- FOOD --\n";
-  cout << "8.  Croissant ............ 85,000\n";
-  cout << "9.  Donut ................ 70,000\n";
-  cout << "10. Sandwich ............. 160,000\n";
-  cout << "11. Cake Slice ........... 95,000\n";
-
-  cout << "\n-- EXTRAS --\n";
-  cout << "12. Extra Shot ........... 40,000\n";
-  cout << "13. Oat Milk ............. 25,000\n";
-  cout << "14. Vanilla Syrup ........ 15,000\n";
-
-  cout << "\n==============================\n";
+  cout << "===============================================\n\n";
 
   cout << "\nPress enter to continue...";
   cin.get();
@@ -69,6 +79,7 @@ int menu() {
 
 int main() {
   int z;
+  loadMenu();
 
   while (true) {
     z = menu();
