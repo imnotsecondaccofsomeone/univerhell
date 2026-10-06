@@ -10,30 +10,36 @@ struct menuItem {
   int price;
 };
 
+struct cartItems {
+  int itemNumber;
+  int quantity;
+};
+
 vector<menuItem> menuVector;
+vector<cartItems> cart;
 
 void loadMenu() {
   // ----- HOT DRINKS -----
-  menuVector.push_back({"Espresso", "HOT", 70000});
-  menuVector.push_back({"Cappuccino", "HOT", 110000});
-  menuVector.push_back({"Latte", "HOT", 130000});
-  menuVector.push_back({"Chai Tea", "HOT", 60000});
+  menuVector.push_back({"Espresso", "HOT", 3});
+  menuVector.push_back({"Cappuccino", "HOT", 4});
+  menuVector.push_back({"Latte", "HOT", 5});
+  menuVector.push_back({"Chai Tea", "HOT", 3});
 
   // ----- COLD DRINKS -----
-  menuVector.push_back({"Iced Coffee", "COLD", 130000});
-  menuVector.push_back({"Cold Brew", "COLD", 140000});
-  menuVector.push_back({"Orange Juice", "COLD", 90000});
+  menuVector.push_back({"Iced Coffee", "COLD", 5});
+  menuVector.push_back({"Cold Brew", "COLD", 5});
+  menuVector.push_back({"Orange Juice", "COLD", 4});
 
   // ----- FOOD -----
-  menuVector.push_back({"Croissant", "FOOD", 85000});
-  menuVector.push_back({"Donut", "FOOD", 70000});
-  menuVector.push_back({"Sandwich", "FOOD", 160000});
-  menuVector.push_back({"Cake Slice", "FOOD", 95000});
+  menuVector.push_back({"Croissant", "FOOD", 3});
+  menuVector.push_back({"Donut", "FOOD", 3});
+  menuVector.push_back({"Sandwich", "FOOD", 7});
+  menuVector.push_back({"Cake Slice", "FOOD", 4});
 
   // ----- EXTRAS -----
-  menuVector.push_back({"Extra Shot", "EXTRA", 40000});
-  menuVector.push_back({"Oat Milk", "EXTRA", 25000});
-  menuVector.push_back({"Vanilla Syrup", "EXTRA", 15000});
+  menuVector.push_back({"Extra Shot", "EXTRA", 2});
+  menuVector.push_back({"Oat Milk", "EXTRA", 1});
+  menuVector.push_back({"Vanilla Syrup", "EXTRA", 1});
 }
 
 void displayCafeMenu() {
@@ -41,18 +47,74 @@ void displayCafeMenu() {
 
   cout << "===============================================\n";
   cout << "\t LOS POLLOS HERMANOS CAFE MENU \t\n";
-  cout << "\t     all prices in Toman\n";
   cout << "===============================================\n\n";
 
   for (int i = 0; i < menuVector.size(); i++) {
     cout << i + 1 << ".   " << menuVector[i].name
-         << " ........................... " << menuVector[i].price << endl;
+         << " ........................... " << menuVector[i].price << "$"
+         << endl;
   }
 
   cout << "===============================================\n\n";
 
   cout << "\nPress enter to continue...";
   cin.get();
+}
+
+int chooseOrder() {
+  system("clear");
+
+  cout << "===============================================\n";
+  cout << "\t LOS POLLOS HERMANOS CAFE MENU \t\n";
+  cout << "===============================================\n\n";
+
+  for (int i = 0; i < menuVector.size(); i++) {
+    cout << i + 1 << ".   " << menuVector[i].name
+         << " ........................... " << menuVector[i].price << "$"
+         << endl;
+  }
+
+  cout << "===============================================\n\n";
+
+  int indexNumber;
+  cout << "choose your number to want add into cart: ";
+  cin >> indexNumber;
+
+  if (indexNumber < 1 || indexNumber > menuVector.size()) {
+    system("clear");
+    cin.get();
+    cout << "no suck item! \nPress enter to continue...";
+    cin.get();
+    return 0;
+  }
+
+  int quantity;
+  cout << "how many? ";
+  cin >> quantity;
+  cin.get();
+
+  cart.push_back({indexNumber - 1, quantity});
+
+  int total = 0;
+  cout << "\n+---------------------------------+\n";
+  cout << "|              Cart               |\n";
+  cout << "+---------------------------------+\n";
+
+  for (int i = 0; i < cart.size(); i++) {
+    int n = cart[i].itemNumber;
+    int lineTotal = menuVector[n].price * cart[i].quantity;
+    cout << cart[i].quantity << " x " << menuVector[n].name << " ............ "
+         << lineTotal << "$" << endl;
+
+    total = total + lineTotal;
+  }
+
+  cout << "Total ................... " << total << "$" << endl;
+
+  cout << "press enter to continue...";
+  cin.get();
+
+  return 0;
 }
 
 int menu() {
@@ -89,6 +151,7 @@ int main() {
       displayCafeMenu();
       break;
     case 2:
+      chooseOrder();
       break;
     case 3:
       break;
