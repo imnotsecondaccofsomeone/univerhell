@@ -208,6 +208,8 @@ void abortOrder() {
   cin.get();
 }
 
+void changeOrder() {}
+
 int menu() {
   system("clear");
   int customerChoice;
@@ -221,7 +223,8 @@ int menu() {
   cout << "3. Wait list..." << endl;
   cout << "4. Abort order..." << endl;
   cout << "5. Abort recent order..." << endl;
-  cout << "6. Exit..." << endl;
+  cout << "6. Change order..." << endl;
+  cout << "7. Exit..." << endl;
 
   cout << "\nplease choose your option between 1-6: ";
   cin >> customerChoice;
@@ -254,13 +257,16 @@ int main() {
       abortLastOrder();
       break;
     case 6:
+      changeOrder();
+      break;
+    case 7:
       return 0;
       break;
     default:
       system("clear");
       cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
               "!!!!\n";
-      cout << "                       CHOOSE BETWEEN 1-6\n";
+      cout << "                       CHOOSE BETWEEN 1-7\n";
       cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
               "!!!!\n";
       cout << "                    Press enter to continue...\n";
