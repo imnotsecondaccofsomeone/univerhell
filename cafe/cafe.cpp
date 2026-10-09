@@ -10,13 +10,20 @@ struct menuItem {
   int price;
 };
 
-struct cartItems {
-  int itemNumber;
+struct orderedItem {
+  string name;
   int quantity;
+  int price;
+};
+
+struct orderStruct {
+  string customerName;
+  vector<orderedItem> items;
+  int total = 0;
 };
 
 vector<menuItem> menuVector;
-vector<cartItems> cart;
+vector<orderStruct> allOrders;
 
 void loadMenu() {
   // ----- HOT DRINKS -----
@@ -61,60 +68,144 @@ void displayCafeMenu() {
   cin.get();
 }
 
-int chooseOrder() {
+void chooseOrder() {
   system("clear");
 
-  cout << "===============================================\n";
-  cout << "\t LOS POLLOS HERMANOS CAFE MENU \t\n";
-  cout << "===============================================\n\n";
+  orderStruct currentOrder;
+  cout << "What is your name? ";
+  getline(cin, currentOrder.customerName);
+
+  cout << "\nChoose items. Enter 0 when finished:\n";
 
   for (int i = 0; i < menuVector.size(); i++) {
-    cout << i + 1 << ".   " << menuVector[i].name
-         << " ........................... " << menuVector[i].price << "$"
+    cout << i + 1 << ". " << menuVector[i].name << " - $" << menuVector[i].price
          << endl;
   }
 
-  cout << "===============================================\n\n";
+  while (true) {
+    int number;
+    cout << "\nItem number (0 to finish): ";
+    cin >> number;
 
-  int indexNumber;
-  cout << "choose your number to want add into cart: ";
-  cin >> indexNumber;
+    if (number == 0) {
+      break;
+    }
 
-  if (indexNumber < 1 || indexNumber > menuVector.size()) {
-    system("clear");
-    cin.get();
-    cout << "no suck item! \nPress enter to continue...";
-    cin.get();
-    return 0;
+    if (number < 1 || number > menuVector.size()) {
+      cout << "Invalid item number.\n";
+      continue;
+    }
+
+    int quantity;
+    cout << "Quantity: ";
+    cin >> quantity;
+
+    // Save this item in this customer's order.
+    orderedItem item;
+    item.name = menuVector[number - 1].name;
+    item.quantity = quantity;
+    item.price = menuVector[number - 1].price;
+
+    currentOrder.items.push_back(item);
+    currentOrder.total += item.price * item.quantity;
   }
 
-  int quantity;
-  cout << "how many? ";
-  cin >> quantity;
+  allOrders.push_back(currentOrder);
+
+  system("clear");
+  cout << "\nOrder for " << currentOrder.customerName << ":\n";
+  for (int i = 0; i < currentOrder.items.size(); i++) {
+    cout << currentOrder.items[i].quantity << " x "
+         << currentOrder.items[i].name << endl;
+  }
+  cout << "Total: $" << currentOrder.total << endl;
+
+  cout << "Press Enter to continue...";
+  cin.ignore();
   cin.get();
+}
 
-  cart.push_back({indexNumber - 1, quantity});
+void waitlist() {
+  system("clear");
 
-  int total = 0;
-  cout << "\n+---------------------------------+\n";
-  cout << "|              Cart               |\n";
-  cout << "+---------------------------------+\n";
-
-  for (int i = 0; i < cart.size(); i++) {
-    int n = cart[i].itemNumber;
-    int lineTotal = menuVector[n].price * cart[i].quantity;
-    cout << cart[i].quantity << " x " << menuVector[n].name << " ............ "
-         << lineTotal << "$" << endl;
-
-    total = total + lineTotal;
+  if (allOrders.empty()) {
+    cout << "There are no orders yet.\n";
   }
 
-  cout << "Total ................... " << total << "$" << endl;
+  for (int i = 0; i < allOrders.size(); i++) {
+    cout << "\nOrder " << i + 1 << " for " << allOrders[i].customerName
+         << ":\n";
 
-  cout << "press enter to continue...";
+    for (int j = 0; j < allOrders[i].items.size(); j++) {
+      cout << "  " << allOrders[i].items[j].quantity << " x "
+           << allOrders[i].items[j].name << endl;
+    }
+
+    cout << "Total: $" << allOrders[i].total << endl;
+  }
+
+  cout << "\nPress Enter to continue...";
   cin.get();
+}
 
-  return 0;
+void abortLastOrder() {
+  system("clear");
+
+  if (allOrders.size() == 0) {
+    cout << "There are no orders to abort.\n";
+  } else {
+    int choice;
+
+    cout << "Abort the most recent order? Enter 1 for yes, 0 for no: ";
+    cin >> choice;
+    cin.get();
+
+    if (choice == 1) {
+      allOrders.pop_back();
+      cout << "The most recent order was aborted.\n";
+    } else {
+      cout << "No order was aborted.\n";
+    }
+  }
+
+  cout << "Press Enter to continue...";
+  cin.get();
+}
+
+void abortOrder() {
+  system("clear");
+
+  if (allOrders.empty()) {
+    cout << "There are no orders to abort.\n";
+    cout << "Press Enter to continue...";
+    cin.get();
+  }
+
+  cout << "Orders:\n";
+
+  for (int i = 0; i < allOrders.size(); i++) {
+    cout << i + 1 << ". " << allOrders[i].customerName << " - Total: $"
+         << allOrders[i].total << endl;
+  }
+
+  int orderNumber;
+  cout << "\nEnter the order number to abort (0 to cancel): ";
+  cin >> orderNumber;
+
+  if (orderNumber == 0) {
+    cin.get();
+    cout << "No order was aborted.\n";
+  } else if (orderNumber < 1 || orderNumber > allOrders.size()) {
+    cin.get();
+    cout << "Invalid order number.\n";
+  } else {
+    allOrders.erase(allOrders.begin() + orderNumber - 1);
+    cin.get();
+    cout << "Order aborted.\n";
+  }
+
+  cout << "Press Enter to continue...";
+  cin.get();
 }
 
 int menu() {
@@ -128,8 +219,8 @@ int menu() {
   cout << "1. Menu... " << endl;
   cout << "2. Order..." << endl;
   cout << "3. Wait list..." << endl;
-  cout << "4. Change your order..." << endl;
-  cout << "5. Abort your order..." << endl;
+  cout << "4. Abort order..." << endl;
+  cout << "5. Abort recent order..." << endl;
   cout << "6. Exit..." << endl;
 
   cout << "\nplease choose your option between 1-6: ";
@@ -154,10 +245,13 @@ int main() {
       chooseOrder();
       break;
     case 3:
+      waitlist();
       break;
     case 4:
+      abortOrder();
       break;
     case 5:
+      abortLastOrder();
       break;
     case 6:
       return 0;
