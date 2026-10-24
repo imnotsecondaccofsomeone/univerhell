@@ -147,6 +147,120 @@ void searchContact(const vector<Contact>& contacts){
   cin.get();
 }
 
+void deleteContact(vector<Contact>& contacts){
+  system("clear");
+
+  if(contacts.empty()){
+    cout << "phonebook is empty! \n"; 
+    cout << "please get back and create a phone into phonebook...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  cout << "==== ALL Contacts ===\n";
+  for(int i = 0; i < contacts.size(); i++){
+    cout << i + 1 << ". " << contacts[i].f_name << " - " << contacts[i].l_name << " - " << contacts[i].phone << endl;
+  }
+  cout << "=====================\n";
+
+  int pick;
+  cout << "pick a number to delete(pick 0 to cancel): ";
+  cin >> pick;
+
+  if(pick == 0){
+    return;
+  }
+
+  if(pick < 1 || pick > contacts.size()){
+    cout << "invalid number!\n";
+    cout << "press enter to continue...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  contacts.erase(contacts.begin() + (pick - 1));
+  writeFile(contacts);
+
+  cout << "contact deleted!\n";
+  cout << "press enter to continue...";
+  cin.get();
+  cin.get();
+}
+
+void editContact(vector<Contact>& contacts){
+  system("clear");
+
+  if(contacts.empty()){
+    cout << "phonebook is empty!\n";
+    cout << "press enter to continue...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  cout << "==== ALL Contacts ===\n";
+  for(int i = 0; i < contacts.size(); i++){
+    cout << i + 1 << ". "
+         << contacts[i].f_name << " "
+         << contacts[i].l_name << " - "
+         << contacts[i].phone << endl;
+  }
+  cout << "=====================\n";
+
+  int pick;
+  cout << "which number to edit? (0 to cancel): ";
+  cin >> pick;
+
+  if(pick == 0){
+    return;
+  }
+
+  if(pick < 0 || pick > contacts.size()){
+    cout << "invalid number!\n";
+    cout << "press enter to continue...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  int idx = pick - 1;
+
+  cout << "\ncurrent: "
+       << contacts[idx].f_name << " "
+       << contacts[idx].l_name << " - "
+       << contacts[idx].phone << "\n\n";
+
+  cin.get();  // eat the '\n' from cin >> pick
+
+  string tmp;
+
+  cout << "new first name (leave empty to keep): ";
+  getline(cin, tmp);
+  if(!tmp.empty()){
+    contacts[idx].f_name = tmp;
+  }
+
+  cout << "new last name (leave empty to keep): ";
+  getline(cin, tmp);
+  if(!tmp.empty()){
+    contacts[idx].l_name = tmp;
+  }
+
+  cout << "new phone (leave empty to keep): ";
+  getline(cin, tmp);
+  if(!tmp.empty()){
+    contacts[idx].phone = tmp;
+  }
+
+  writeFile(contacts);
+
+  cout << "contact updated!\n";
+  cout << "press enter to continue...";
+  cin.get();
+}
+
 int main(){
   int z;
   readFile(contacts);
@@ -164,8 +278,10 @@ int main(){
         displayContacts(contacts);
         break;
       case 4:
+        deleteContact(contacts);
         break;
       case 5:
+        editContact(contacts);
         break;
       case 6:
         system("clear");
