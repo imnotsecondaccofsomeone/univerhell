@@ -70,20 +70,23 @@ void addPhone(vector<Contact>& contacts){
   system("clear");
   Contact newContact;
 
+  cin.get();
   cout << "first name: ";
-  cin >> newContact.f_name;
-  
+  getline(cin, newContact.f_name);
+
+
   cout << "last name: ";
-  cin >> newContact.l_name;
+  getline(cin, newContact.l_name);
+
 
   cout << "phone number: ";
-  cin >> newContact.phone;
+  getline(cin, newContact.phone);
 
   contacts.push_back(newContact);
 
   writeFile(contacts);
   cout << "New contact added!\n";
-  cin.get();
+  cout << "press enter to continue...";
   cin.get();
 }
 
@@ -108,6 +111,42 @@ void displayContacts(const vector<Contact>& contacts){
   cin.get();
 }
 
+void searchContact(const vector<Contact>& contacts){
+  system("clear");
+
+  cin.get();
+
+  if(contacts.empty()){
+    cout << "phonebook is empty!\n";
+    cout << "please get back and create a phone into phonebook...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  string query;
+  cout << "search by name: ";
+  getline(cin, query);
+
+  bool found = false;
+  for(int i = 0; i < contacts.size(); i++){
+    if(contacts[i].f_name == query || contacts[i].l_name == query){
+      cout << i + 1 << ". "
+        << contacts[i].f_name << " "
+        << contacts[i].l_name << " - "
+        << contacts[i].phone << endl;
+      found = true;
+    }
+  }
+
+  if(!found){
+    cout << "no contact found for \"" << query << "\"\n";
+  }
+
+  cout << "press enter to continue...";
+  cin.get();
+}
+
 int main(){
   int z;
   readFile(contacts);
@@ -119,6 +158,7 @@ int main(){
         addPhone(contacts);
         break;
       case 2:
+        searchContact(contacts);
         break;
       case 3:
         displayContacts(contacts);
