@@ -12,8 +12,8 @@ struct Contact {
 
 vector<Contact> contacts;
 
-void readFile(vector<Contact>& contacts, const string& filename){
-  ifstream r(filename);
+void readFile(vector<Contact>& contacts){
+  ifstream r("phonebook.txt");
 
   if(!r.is_open()){
     return;
@@ -29,8 +29,8 @@ void readFile(vector<Contact>& contacts, const string& filename){
   r.close();
 }
 
-void writeFile(const vector<Contact>& contacts, const string& filename){
-  ofstream w(filename);
+void writeFile(const vector<Contact>& contacts){
+  ofstream w("phonebook.txt");
 
   if(!w.is_open()){
     cout << "Error: could not open file for writing!\n";
@@ -81,16 +81,36 @@ void addPhone(vector<Contact>& contacts){
 
   contacts.push_back(newContact);
 
-  writeFile(contacts, "phonebook.txt");
+  writeFile(contacts);
   cout << "New contact added!\n";
+  cin.get();
+  cin.get();
+}
+
+void displayContacts(const vector<Contact>& contacts){
+  system("clear");
+
+  if(contacts.empty()){
+    cout << "phonebook is empty! \n"; 
+    cout << "please get back and create a phone into phonebook...";
+    cin.get();
+    cin.get();
+    return;
+  }
+
+  cout << "==== ALL Contacts ===\n";
+  for(int i = 0; i < contacts.size(); i++){
+    cout << i + 1 << ". " << contacts[i].f_name << " - " << contacts[i].l_name << " - " << contacts[i].phone << endl;
+  }
+  cout << "=====================\n";
+  cout << "press enter to continue...";
   cin.get();
   cin.get();
 }
 
 int main(){
   int z;
-  const string filename = "phonebook.txt";
-  readFile(contacts, filename);
+  readFile(contacts);
 
   while(true){
     z = menu();
@@ -101,6 +121,7 @@ int main(){
       case 2:
         break;
       case 3:
+        displayContacts(contacts);
         break;
       case 4:
         break;
